@@ -1,0 +1,7 @@
+{
+    
+    "5": " Assume the first choice is correct.\n5 + (7 - 2) = 10\n5 + 5 = 10\n10 = 10\nSince the equation works out to be true, choice 1 is a possibility.\n\nNow assume the second choice is correct.\n5 + (7 - 2) = 12\n5 + 5 = 12\n10 = 12\nSince the equation does not work out to be true, choice 2 is not a possibility and can be eliminated.\n\nNow assume the third choice is correct.\n5 + (7 - 2) = 5\n5 + 5 = 5\n10 = 5\nSince the equation does not work out to be true, choice 3 is not a possibility and can be eliminated.\n\nSince only one choice, 10, works out to be true, it must be the correct answer.",
+    "11": " Assume the answer is 8.\nThen, 3 + 2 = 8.\nThis is not correct, because 3 + 2 = 5.\n\nAssume the answer is 5.\nThen, 3 + 2 = 5.\nThis is correct, because 3 + 2 = 5.\n\nAssume the answer is 2.\nThen, 3 + 2 = 2.\nThis is not correct, because 3 + 2 = 5.\n\nTherefore, the answer is 5.",
+    "23": " Let's assume the answer is 2.\n2 x (5 + 1) = 2 x 6 = 12\nThis does not match the answer in the choices.\n\nLet's assume the answer is 7.\n2 x (5 + 1) = 2 x 6 = 12\nThis does not match the answer in the choices.\n\nLet's assume the answer is 12.\n2 x (5 + 1) = 2 x 6 = 12\nThis matches the answer in the choices.\n\nThe answer is 12.",
+    
+}

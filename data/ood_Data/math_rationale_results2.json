@@ -1,0 +1,7 @@
+{
+    
+    "5": " \nFirst, we need to solve the expression inside the parentheses: 7 - 2 = 5.\n\nThen, we can add 5 to this result: 5 + 5 = 10.\n\nTherefore, the final answer is 10.",
+    "11": " \nExplanation:\nIn this simple addition problem, we are given 3 + 2 = ?. To solve this, we simply add the two numbers together. 3 + 2 = 5. Therefore, the answer is 5.\n\nAnswer: 5",
+    "23": " \nFirst, we need to follow PEMDAS (PEMDAS means parentheses, exponents, multiplication, division, addition, and subtraction). \n\nOur parenthesis contains 5+1, which equals 6.\n\nNext we can say  2 x 6 = 12\n\nThe answer is 12.",
+    
+}
