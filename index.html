@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IFCoT: Insights Fusion Chain of Thought for Multimodal Reasoning in LLMs</title>
+  <meta name="description" content="IFCoT: Insights Fusion Chain of Thought for Multimodal Reasoning in LLMs. IEEE TCSVT 2026. A heterogeneous multi-path CoT framework fusing forward, reverse, and data-driven reasoning under an information-theoretic objective." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="static/css/main.css" />
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="venue-badge">IEEE TCSVT 2026</div>
+
+    <h1 class="paper-title">
+      IFCoT: Insights Fusion Chain of Thought<br/>
+      for Multimodal Reasoning in LLMs
+    </h1>
+
+    <!-- Authors -->
+    <div class="authors">
+      <span class="author">
+        <a href="https://scholar.google.com.hk/citations?user=LLVGPzcAAAAJ&hl=zh-CN" target="_blank" rel="noopener">Jiaxiang Liu</a><sup>#,1,2,3</sup>
+      </span>
+      <span class="author">
+        <a href="mailto:dujiawei@u.nus.edu">Jiawei Du</a><sup>#,4</sup>
+      </span>
+      <span class="author">Tianxiang Hu<sup>#,3</sup></span>
+      <span class="author">Linjie Tong<sup>3</sup></span>
+      <span class="author">Yang Feng<sup>5</sup></span>
+      <span class="author">Joey Tianyi Zhou<sup>4</sup></span>
+      <span class="author">
+        <a href="mailto:xumingkun@gdiist.cn">Mingkun Xu</a><sup>*,1</sup>
+      </span>
+      <span class="author">
+        <a href="mailto:zuozhuliu@intl.zju.edu.cn">Zuozhu Liu</a><sup>*,2,3</sup>
+      </span>
+    </div>
+
+    <!-- Affiliations -->
+    <div class="affiliations">
+      <span><sup>1</sup>Guangdong Institute of Intelligence Science and Technology</span>
+      <span><sup>2</sup>Stomatology Hospital, Zhejiang University School of Medicine</span>
+      <span><sup>3</sup>ZJU–UIUC Institute, Zhejiang University</span>
+      <span><sup>4</sup>CFAR, A*STAR, Singapore</span>
+      <span><sup>5</sup>Angelalign Inc.</span>
+    </div>
+    <div class="affiliations" style="margin-top:-18px;">
+      <span><sup>#</sup>Equal contribution</span>
+      <span><sup>*</sup>Corresponding authors</span>
+    </div>
+
+    <!-- Links -->
+    <div class="links">
+      <a class="btn btn-primary" href="#" target="_blank" rel="noopener" id="paper-link">
+        <i class="fas fa-file-pdf"></i> Paper
+      </a>
+      <a class="btn btn-secondary" href="https://github.com/JXLiu-AI/IFCoT" target="_blank" rel="noopener" id="code-link">
+        <i class="fab fa-github"></i> Code
+      </a>
+      <a class="btn btn-secondary" href="#results">
+        <i class="fas fa-chart-bar"></i> Results
+      </a>
+      <a class="btn btn-secondary" href="#bibtex">
+        <i class="fas fa-quote-right"></i> BibTeX
+      </a>
+    </div>
+
+    <!-- Teaser figure -->
+    <div class="teaser">
+      <div class="teaser-inner">
+        <img src="static/images/fig1_teaser.png" alt="IFCoT teaser: performance comparison" />
+        <p class="teaser-caption">
+          <strong>Figure 1.</strong> Performance of IFCoT against MM-CoT and DDCoT across the five ScienceQA question classes (NAT, SOC, LAN, G1–6, G7–12). Fusing three heterogeneous reasoning paths — forward, reverse, and data-driven — consistently outperforms any single path and surpasses prior CoT methods.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABSTRACT ===== -->
+<section class="section" id="abstract">
+  <div class="container">
+    <h2 class="section-title">Abstract</h2>
+    <div class="abstract-text">
+      <p>
+        Existing multimodal reasoning approaches typically address tasks using enhanced large language models (LLMs) with multi-step reasoning (e.g. Chain-of-Thought, CoT) along a <em>single</em> reasoning path, which either relies on labor-intensive annotations or remains vulnerable to data bias and hallucination.
+      </p>
+      <p>
+        We propose <strong>Insights Fusion CoT (IFCoT)</strong>, a multimodal reasoning framework that fuses insights from three distinct yet complementary thinking paths: the <strong>forward</strong> path, the <strong>reverse</strong> path, and the <strong>data-driven</strong> path. The forward and reverse paths generate multi-step rationales with LLMs, inspired by human reasoning strategies in cognitive psychology — forward directly infers the answer from question descriptions, while reverse derives it by indirectly eliminating wrong answers. The data-driven path is supervised with annotated rationales and provides experience-grounded predictions.
+      </p>
+      <p>
+        Unlike naïve multi-path self-consistency that samples multiple CoTs from a single prompting pattern, IFCoT deliberately constructs <em>heterogeneous</em> reasoning paths with distinct inductive biases and justifies their fusion under an <em>information-theoretic</em> objective: maximize the joint Beneficial Information while penalizing inter-path redundancy. Extensive experiments on ScienceQA and medical VQA benchmarks show that IFCoT substantially outperforms prior state-of-the-art CoT methods and surpasses human-level performance reported on ScienceQA.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METHOD ===== -->
+<section class="section section-alt" id="method">
+  <div class="container">
+    <h2 class="section-title">Method</h2>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-icon">🧭</div>
+        <h3>Forward Thinking (FT)</h3>
+        <p>An LLM produces a direct, step-by-step rationale that infers the answer from the question and visual context — a knowledge-driven chain that mirrors human deductive reasoning.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-icon">🔄</div>
+        <h3>Reverse Thinking (RT)</h3>
+        <p>The same LLM is prompted to <em>eliminate</em> wrong options one by one, inspired by indirect proof in mathematics. RT exposes a different failure surface than FT, providing complementary evidence.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-icon">📚</div>
+        <h3>Data-driven Thinking (DT)</h3>
+        <p>A fine-tuned T5-based model produces a rationale grounded in annotated training data, offering precise, experience-like signals that LLMs alone cannot access.</p>
+      </div>
+    </div>
+
+    <!-- Pipeline figure -->
+    <div class="figure-block" style="margin-top: 56px;">
+      <img src="static/images/fig2_pipeline.png" alt="IFCoT pipeline" />
+      <p class="figure-caption">
+        <strong>Figure 2.</strong> IFCoT pipeline. The three rationales are generated independently from heterogeneous prompting templates / a fine-tuned model, and then aggregated via self-consistency. The three paths are explicitly designed to have low inter-path mutual information, satisfying the information-theoretic objective derived in Section III-A.
+      </p>
+    </div>
+
+    <!-- Path comparison figure -->
+    <div class="figure-block" style="margin-top: 32px;">
+      <img src="static/images/fig3_paths.png" alt="Comparison of reasoning paradigms" />
+      <p class="figure-caption">
+        <strong>Figure 3.</strong> A schematic comparison of reasoning paradigms. (a) Vanilla VQA. (b) MM-CoT generates a single rationale, then derives the answer. (c) DDCoT decomposes the question into sub-questions. (d) <strong>IFCoT</strong> aggregates three distinct modes of thinking — Forward, Reverse, and Data-driven — into a single, more reliable prediction.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESULTS ===== -->
+<section class="section" id="results">
+  <div class="container">
+    <h2 class="section-title">Main Results</h2>
+
+    <h3 class="subsection-title">ScienceQA — Surpassing Human Reasoning</h3>
+    <p class="table-caption">
+      Accuracy (%) on ScienceQA across five question classes.
+      <strong>Bold</strong> = best, <u>underline</u> = second best. IFCoT with Gemini Pro achieves <strong>92.36</strong> average, exceeding human performance (88.40) and the strongest LLM baseline ToolFiVe (87.74) by 4.62 points.
+    </p>
+    <div class="table-wrap">
+      <table class="result-table compact">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Size</th>
+            <th>NAT</th>
+            <th>SOC</th>
+            <th>LAN</th>
+            <th>G1–6</th>
+            <th>G7–12</th>
+            <th>Avg</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#f5f5f5;">
+            <td>Human <span style="color:#94a3b8;">[Lu et al.]</span></td>
+            <td>—</td>
+            <td>90.23</td><td>84.97</td><td>87.48</td><td>91.59</td><td>82.42</td><td>88.40</td>
+          </tr>
+          <tr>
+            <td>GPT-3.5 w/ CoT</td>
+            <td>175B</td>
+            <td>75.44</td><td>70.87</td><td>78.09</td><td>78.23</td><td>69.68</td><td>75.17</td>
+          </tr>
+          <tr>
+            <td>Gemini Pro</td>
+            <td>—</td>
+            <td>75.98</td><td>82.11</td><td>79.27</td><td>81.75</td><td>71.59</td><td>78.12</td>
+          </tr>
+          <tr>
+            <td>Chameleon (GPT-4)</td>
+            <td>—</td>
+            <td>89.83</td><td>74.13</td><td>89.82</td><td>88.03</td><td>83.72</td><td>86.54</td>
+          </tr>
+          <tr>
+            <td>ToolFiVe (GPT-3.5-Turbo)</td>
+            <td>—</td>
+            <td><u>90.05</u></td><td>77.95</td><td><strong>90.91</strong></td><td><u>89.62</u></td><td>84.44</td><td><u>87.74</u></td>
+          </tr>
+          <tr>
+            <td>ChatGPT IR-CoT-Retrieval</td>
+            <td>—</td>
+            <td>86.16</td><td>86.89</td><td>88.32</td><td>87.87</td><td>85.07</td><td>87.37</td>
+          </tr>
+          <tr>
+            <td>MM-CoT</td>
+            <td>223M</td>
+            <td>87.52</td><td>77.17</td><td>85.82</td><td>84.65</td><td><u>85.37</u></td><td>84.91</td>
+          </tr>
+          <tr>
+            <td>DDCoT</td>
+            <td>223M</td>
+            <td>88.72</td><td>86.84</td><td>84.91</td><td>88.58</td><td>85.10</td><td>87.34</td>
+          </tr>
+          <tr>
+            <td><strong>IFCoT<sub>ChatGPT</sub> (Ours)</strong></td>
+            <td>223M</td>
+            <td>89.83</td><td>94.60</td><td>89.82</td><td>91.92</td><td>88.86</td><td>90.83</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>IFCoT<sub>Gemini Pro</sub> (Ours)</strong></td>
+            <td>223M</td>
+            <td><strong>91.70</strong></td><td><strong>96.06</strong></td><td><u>90.73</u></td><td><strong>92.77</strong></td><td><strong>91.63</strong></td><td><strong>92.36</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subsection-title">Medical VQA — VQA-RAD &amp; SLAKE-EN</h3>
+    <p class="table-caption">
+      With only 223M trainable parameters, IFCoT outperforms LLaVA-Med (7B fine-tuned) on both medical datasets.
+    </p>
+    <div class="table-wrap">
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>VQA-RAD</th>
+            <th>SLAKE-EN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>LLaVA</td><td>Zero-shot</td><td>7B</td><td>59.19</td><td>50.24</td></tr>
+          <tr><td>Gemini Pro</td><td>Zero-shot</td><td>—</td><td>66.54</td><td>69.71</td></tr>
+          <tr><td>LLaVA</td><td>Fine-tuning</td><td>7B</td><td>65.07</td><td>63.22</td></tr>
+          <tr><td>LLaVA-Med (Vicuna)</td><td>Fine-tuning</td><td>7B</td><td>81.98</td><td>83.17</td></tr>
+          <tr><td>MM-CoT</td><td>Fine-tuning</td><td>223M</td><td>76.84</td><td>79.09</td></tr>
+          <tr class="highlight-row">
+            <td><strong>IFCoT (Ours)</strong></td>
+            <td>Fine-tuning</td>
+            <td>223M</td>
+            <td><strong>81.99</strong> <span class="delta">(+5.15)</span></td>
+            <td><strong>84.38</strong> <span class="delta">(+5.29)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Box plot figure -->
+    <div class="figure-block" style="margin-top: 48px;">
+      <img src="static/images/fig4_boxline.png" alt="Per-path accuracy box plot" />
+      <p class="figure-caption">
+        <strong>Figure 4.</strong> Self-consistency across three reasoning paths. Each box spans the per-path accuracies; the orange line marks the gain delivered by the IFCoT trio over the strongest single-prompt baseline. Heterogeneous paths consistently outperform homogeneous repetition.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FRAMEWORK ===== -->
+<section class="section section-alt" id="framework">
+  <div class="container">
+    <h2 class="section-title">Framework</h2>
+    <div class="figure-block">
+      <img src="static/images/fig5_framework.png" alt="IFCoT framework architecture" />
+      <p class="figure-caption">
+        <strong>Figure 5.</strong> IFCoT architecture. Visual features from a DETR encoder are fused with textual question and augmented context (image captions from InstructBLIP). The fused representation drives three parallel rationale generators; a Flan-T5 answer head then performs self-consistency aggregation over the three answer distributions.
+      </p>
+    </div>
+
+    <h3 class="subsection-title" style="margin-top:40px;">Information-Theoretic Objective</h3>
+    <p style="font-size:15px; color:var(--color-text-muted); line-height:1.7;">
+      Let <em>X<sub>A</sub>, X<sub>B</sub>, X<sub>C</sub></em> denote the outputs from the forward, reverse, and data-driven paths, and let <em>Y</em> be the ground-truth answer. Define <strong>Beneficial Information</strong> as <code style="background:#fff; padding:1px 6px; border-radius:4px; border:1px solid var(--color-border);">𝓑(S) = I(S; Y)</code>. IFCoT optimizes:
+    </p>
+    <div style="background:#fff; border:1px solid var(--color-border); border-radius:var(--radius); padding:20px 28px; margin-top:14px; text-align:center; font-family:'Source Code Pro', monospace; font-size:15px; box-shadow:var(--shadow);">
+      max&nbsp; 𝓑({X<sub>A</sub>, X<sub>B</sub>, X<sub>C</sub>}) &nbsp;−&nbsp; I(X<sub>B</sub>; X<sub>A</sub>) &nbsp;−&nbsp; I(X<sub>C</sub>; X<sub>A</sub>, X<sub>B</sub>)
+    </div>
+    <p style="font-size:14px; color:var(--color-text-muted); margin-top:12px;">
+      The first term encourages each path to be individually informative; the latter two penalize inter-path redundancy. This is why three <em>heterogeneous</em> paths beat three samples from one prompting template.
+    </p>
+  </div>
+</section>
+
+<!-- ===== BIBTEX ===== -->
+<section class="section" id="bibtex">
+  <div class="container">
+    <h2 class="section-title">BibTeX</h2>
+    <div class="bibtex-wrap">
+      <button class="copy-btn" onclick="copyBibtex()"><i class="fas fa-copy"></i> Copy</button>
+      <pre class="bibtex" id="bibtex-block">@article{liu2026ifcot,
+  title   = {IFCoT: Insights Fusion Chain of Thought for
+             Multimodal Reasoning in LLMs},
+  author  = {Liu, Jiaxiang and Du, Jiawei and Hu, Tianxiang and
+             Tong, Linjie and Feng, Yang and Zhou, Joey Tianyi and
+             Xu, Mingkun and Liu, Zuozhu},
+  journal = {IEEE Transactions on Circuits and Systems
+             for Video Technology},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <p>
+      This page is adapted from the
+      <a href="https://nerfies.github.io" target="_blank" rel="noopener">Nerfies project page</a>
+      template. · Contact: <a href="mailto:liujiaxiang@gdiist.cn">liujiaxiang@gdiist.cn</a>
+    </p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
