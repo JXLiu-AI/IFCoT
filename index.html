@@ -268,26 +268,18 @@
   </div>
 </section>
 
-<!-- ===== FRAMEWORK ===== -->
-<section class="section section-alt" id="framework">
+<!-- ===== INFORMATION-THEORETIC OBJECTIVE ===== -->
+<section class="section section-alt" id="objective">
   <div class="container">
-    <h2 class="section-title">Framework</h2>
-    <div class="figure-block">
-      <img src="static/images/fig5_framework.png" alt="IFCoT framework architecture" />
-      <p class="figure-caption">
-        <strong>Figure 5.</strong> IFCoT architecture. Visual features from a DETR encoder are fused with textual question and augmented context (image captions from InstructBLIP). The fused representation drives three parallel rationale generators; a Flan-T5 answer head then performs self-consistency aggregation over the three answer distributions.
-      </p>
-    </div>
-
-    <h3 class="subsection-title" style="margin-top:40px;">Information-Theoretic Objective</h3>
-    <p style="font-size:15px; color:var(--color-text-muted); line-height:1.7;">
-      Let <em>X<sub>A</sub>, X<sub>B</sub>, X<sub>C</sub></em> denote the outputs from the forward, reverse, and data-driven paths, and let <em>Y</em> be the ground-truth answer. Define <strong>Beneficial Information</strong> as <code style="background:#fff; padding:1px 6px; border-radius:4px; border:1px solid var(--color-border);">𝓑(S) = I(S; Y)</code>. IFCoT optimizes:
+    <h2 class="section-title">Information-Theoretic Objective</h2>
+    <p style="font-size:15.5px; line-height:1.75;">
+      Let <em>X<sub>A</sub>, X<sub>B</sub>, X<sub>C</sub></em> denote the outputs from the forward, reverse, and data-driven paths, and let <em>Y</em> be the ground-truth answer. Define <strong>Beneficial Information</strong> as <code style="background:#fff; padding:1px 6px; border-radius:4px; border:1px solid var(--color-border);">𝓑(S) = I(S; Y)</code> for any subset <em>S</em>. IFCoT optimizes:
     </p>
-    <div style="background:#fff; border:1px solid var(--color-border); border-radius:var(--radius); padding:20px 28px; margin-top:14px; text-align:center; font-family:'Source Code Pro', monospace; font-size:15px; box-shadow:var(--shadow);">
+    <div style="background:#fff; border:1px solid var(--color-border); border-radius:var(--radius); padding:24px 32px; margin-top:16px; text-align:center; font-family:'Source Code Pro', monospace; font-size:16px; box-shadow:var(--shadow);">
       max&nbsp; 𝓑({X<sub>A</sub>, X<sub>B</sub>, X<sub>C</sub>}) &nbsp;−&nbsp; I(X<sub>B</sub>; X<sub>A</sub>) &nbsp;−&nbsp; I(X<sub>C</sub>; X<sub>A</sub>, X<sub>B</sub>)
     </div>
-    <p style="font-size:14px; color:var(--color-text-muted); margin-top:12px;">
-      The first term encourages each path to be individually informative; the latter two penalize inter-path redundancy. This is why three <em>heterogeneous</em> paths beat three samples from one prompting template.
+    <p style="font-size:14.5px; color:var(--color-text-muted); margin-top:16px; line-height:1.7;">
+      The first term rewards each path for being individually informative about <em>Y</em>; the two mutual-information terms penalize inter-path redundancy. Under the Chain Rule (Propositions 3.2 &amp; 3.3 in the paper), this objective is tight only when the three paths are <em>heterogeneous</em> — which is why IFCoT's forward / reverse / data-driven design outperforms three samples from a single prompting template.
     </p>
   </div>
 </section>
